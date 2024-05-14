@@ -294,6 +294,8 @@ class PortfolioOverviewPage(tk.Frame):
             try:
                 if crypto_data:
                     for symbol, [prix,qunatite] in crypto_data.items():
+                            total_price = get_coin_price(symbol)
+                            prix = qunatite * total_price
                             label = tk.Label(self, text=f"{symbol}: {prix} {qunatite}")
                             label.pack()
 
