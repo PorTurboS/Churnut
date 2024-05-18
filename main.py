@@ -272,43 +272,51 @@ class PortfolioOverviewPage(tk.Frame):
         self.controller = controller
         label = tk.Label(self, text="Portfolio Overview")
         label.pack(pady=10)
-        self.text_list = {}
-        
+        self.labels = []
 
     
 
     def display_coins(self):
     
+            self.delete_labels()
+
             symbols = self.controller.frames["CryptoSelectionPage"].crypto_infos()
             for symbol in symbols:
                 if self.controller.frames["BudgetApp"].get_portfolio(symbol):
                     crypto_data = {symbol: [self.controller.frames["BudgetApp"].get_portfolio(symbol),self.controller.frames["BudgetApp"].get_portfolio2(symbol)]}
                     self.controller.update_user_crypto(crypto_data)
-                print(self.text_list)
                 data = self.controller.read_db()
                 user_data = data.get(self.controller.current_user, {})
                 if isinstance(user_data,dict):
                     crypto_data = user_data.get('crypto', {})
                 
 
-            try:
-                if crypto_data:
-                    for symbol, [prix,qunatite] in crypto_data.items():
-                            total_price = get_coin_price(symbol)
-                            prix = qunatite * total_price
-                            label = tk.Label(self, text=f"{symbol}: {prix} {qunatite}")
-                            label.pack()
-
-            except:
-                    for symbol in symbols:
-                        prix = self.controller.frames["BudgetApp"].get_portfolio(symbol)
-                        qunatite = self.controller.frames["BudgetApp"].get_portfolio2(symbol)
+            
+            if crypto_data:
+                for symbol, [prix,qunatite] in crypto_data.items():
+                        total_price = get_coin_price(symbol)
+                        prix = qunatite * total_price
                         label = tk.Label(self, text=f"{symbol}: {prix} {qunatite}")
                         label.pack()
+                        self.labels.append(label)
+                        print(self.labels)
 
 
-            back_button = tk.Button(self, text="Back", command=lambda: self.controller.show_frame("CryptoSelectionPage"))
+
+            
+            print(self.labels)
+            back_button = tk.Button(self, text="Back", command=lambda: [self.controller.show_frame("CryptoSelectionPage"),self.delete_labels()])
             back_button.pack()
+            self.labels.append(back_button)
+            
+
+    def delete_labels(self):
+         
+        for label in self.labels:
+            label.destroy()
+        self.labels.clear()
+              
+
                 
                     
 
@@ -317,8 +325,8 @@ class PortfolioOverviewPage(tk.Frame):
 
 
 if __name__ == "__main__":
-    app = BudgetApp()
-    app.mainloop()
+        app = BudgetApp()
+        app.mainloop()
     
 
 
