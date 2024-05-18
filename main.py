@@ -296,7 +296,7 @@ class PortfolioOverviewPage(tk.Frame):
                 for symbol, [prix,qunatite] in crypto_data.items():
                         total_price = get_coin_price(symbol)
                         prix = qunatite * total_price
-                        label = tk.Label(self, text=f"{symbol}: {prix} {qunatite}")
+                        label = tk.Label(self, text=f"{symbol}: {prix} $ pour {qunatite} unités de {self.controller.frames['CryptoSelectionPage'].crypto_details[symbol]}",font=("Arial", 22,"bold"))
                         label.pack()
                         self.labels.append(label)
                         print(self.labels)
